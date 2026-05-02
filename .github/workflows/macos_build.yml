@@ -201,12 +201,13 @@ jobs:
         run: |
           TAG="$(git tag --points-at HEAD)"
           if [ -z "$TAG" ]; then
-            APPNAME="${{ steps.artifact-metadata.outputs.artifact-name }}"
+            DIRNAME="${{ steps.artifact-metadata.outputs.artifact-name }}"
           else
-            APPNAME="PCSX2-$TAG"
+            DIRNAME="PCSX2-$TAG"
           fi
-          mv PCSX2.app "$APPNAME.app"
-          tar --options xz:compression-level=9 -cvJf "${{ steps.artifact-metadata.outputs.artifact-name }}.tar.xz" "$APPNAME.app"
+          mkdir $DIRNAME
+          mv PCSX2.app "$DIRNAME/PCSX2.app"
+          tar --options xz:compression-level=9 -cvJf "${{ steps.artifact-metadata.outputs.artifact-name }}.tar.xz" "$DIRNAME"
           mkdir ci-artifacts
           cp "${{ steps.artifact-metadata.outputs.artifact-name }}.tar.xz" ci-artifacts/macOS.tar.xz
 
